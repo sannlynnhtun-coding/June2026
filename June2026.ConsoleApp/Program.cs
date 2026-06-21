@@ -61,6 +61,10 @@ else
     throw new Exception("Invalid payment type");
 }
 
+// ctrl + /
+// ctrl + k, ctrl + c
+// ctrl + k, ctrl + u
+
 switch (paymentType)
 {
     case PaymentType.KBZPay:
