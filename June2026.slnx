@@ -1,4 +1,9 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
   <Project Path="June2026.ConsoleApp/June2026.ConsoleApp.csproj" />
   <Project Path="June2026.ConsoleApp2/June2026.ConsoleApp2.csproj" Id="a7b4ee3b-120c-45ad-8915-b42e7c3b125e" />
+  <Project Path="June2026.ConsoleApp3/June2026.ConsoleApp3.csproj" Id="efd7edd1-76ea-4215-aced-b13620402a68" />
+  <Project Path="June2026.WinFormsApp/June2026.WinFormsApp.csproj" Id="14c55b03-7afb-4453-9a6b-3ead8617700d" />
 </Solution>
