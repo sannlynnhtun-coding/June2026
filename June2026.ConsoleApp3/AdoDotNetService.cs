@@ -103,13 +103,19 @@ VALUES
 
         string query = @"UPDATE [dbo].[Tbl_Student]
 SET
-    StudentName = 'Aung Aung',
-    FatherName = 'U Kyaw Win',
-    Email = 'aungaung@example.com',
-    DateOfBirth = '2001-05-20',
-    MobileNo = '09987654321'
-WHERE StudentNo = 'STU001';";
+    StudentName = @StudentName,
+    FatherName = @FatherName,
+    Email = @Email,
+    DateOfBirth = @DateOfBirth,
+    MobileNo = @MobileNo
+WHERE StudentNo = @StudentNo;";
         SqlCommand cmd = new SqlCommand(query, connection);
+        cmd.Parameters.AddWithValue("@StudentName", "Updated Name");
+        cmd.Parameters.AddWithValue("@FatherName", "Updated Father");
+        cmd.Parameters.AddWithValue("@Email", "updated.email@example.com");
+        cmd.Parameters.AddWithValue("@DateOfBirth", new DateTime(2000, 1, 1));  
+        cmd.Parameters.AddWithValue("@MobileNo", "09999999999");
+        cmd.Parameters.AddWithValue("@StudentNo", "STU001");
         int result = cmd.ExecuteNonQuery();
 
         connection.Close();
