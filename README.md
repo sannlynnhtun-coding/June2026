@@ -4,6 +4,14 @@ C# => Database
 ADO.NET 
 Dapper
 EFCore
+- Model First
+- Code First
+- Database First (Class Library)
+
+sql server - mssql
+mysql
+oracle
+
 
 nuget package
 npm
