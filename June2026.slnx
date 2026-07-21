@@ -8,6 +8,7 @@
   <Project Path="June2026.ConsoleApp4/June2026.ConsoleApp4.csproj" Id="afb9f157-ba5f-4872-a520-a36874662005" />
   <Project Path="June2026.ConsoleApp5/June2026.ConsoleApp5.csproj" Id="84763987-f487-461f-93e7-5ea3cd2f9c18" />
   <Project Path="June2026.Database/June2026.Database.csproj" Id="231a86c3-a7a0-4644-aba8-efcbdc54c3c5" />
+  <Project Path="June2026.WebApi/June2026.WebApi.csproj" Id="b2977168-d46a-4323-bb5b-5eda682dedae" />
   <Project Path="June2026.WinFormsApp/June2026.WinFormsApp.csproj" Id="14c55b03-7afb-4453-9a6b-3ead8617700d" />
   <Project Path="June2026.WinFormsApp2/June2026.WinFormsApp2.csproj" Id="50966191-ebc8-4e9d-bca2-29567018ba8d" />
 </Solution>
