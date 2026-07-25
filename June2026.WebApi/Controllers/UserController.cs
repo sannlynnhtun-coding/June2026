@@ -61,6 +61,12 @@ public class UserController : ControllerBase
         return Ok(model);
     }
 
+    //[HttpPost("Test")]
+    //public IActionResult Test(OrderRequestModel requestModel)
+    //{
+    //    return Ok();
+    //}
+
     [HttpPut]
     public IActionResult UpsertUser()
     {
@@ -142,3 +148,15 @@ public class UserController : ControllerBase
         return Ok(model);
     }
 }
+
+
+//public class Book
+//{
+//    public int Id { get; set; } 
+//    public int Qty { get; set; }
+//}
+
+//public class OrderRequestModel
+//{
+//    public List<Book> Books { get; set; }
+//}
