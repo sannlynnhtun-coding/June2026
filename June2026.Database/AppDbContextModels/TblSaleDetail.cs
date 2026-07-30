@@ -4,19 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace June2026.Database.AppDbContextModels;
 
-[Table("Tbl_Product")]
-public partial class TblProduct
+[Table("Tbl_SaleDetail")]
+public partial class TblSaleDetail
 {
     [Key]
-    public int ProductId { get; set; }
+    public int SaleDetailId { get; set; }
 
     [Required]
     [MaxLength(50)]
-    public string ProductCode { get; set; } = null!;
+    public string SaleVoucherNo { get; set; } = null!;
 
-    [Required]
-    [MaxLength(200)]
-    public string ProductName { get; set; } = null!;
+    public int ProductId { get; set; }
 
     public decimal Price { get; set; }
 

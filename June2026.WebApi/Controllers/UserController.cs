@@ -1,7 +1,6 @@
-﻿using June2026.Database.AppDbContextModels;
+using June2026.Database.AppDbContextModels;
 using June2026.Domain.Features.User;
 using June2026.Domain.Models;
-using June2026.WebApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
