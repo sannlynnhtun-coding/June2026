@@ -24,3 +24,25 @@ Ctrl + .
 Ctrl + Shift + F5
 
 Query - R / Execute - CUD
+
+NLayer Architecture
+
+Presentation Layer
+Business Layer
+Data Access Layer	
+
+Presentation Layer
+Service Layer (BL + DAL)
+
+Database (EFCore Database First)
+Domain (BL + DAL)
+API
+
+API
+BLL
+DAL
+Database
+
+API
+Domain
+Database

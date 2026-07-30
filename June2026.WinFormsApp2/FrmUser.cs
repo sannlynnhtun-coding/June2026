@@ -1,4 +1,6 @@
 using June2026.Database.AppDbContextModels;
+using June2026.Domain.Features.User;
+using June2026.Domain.Models;
 using Microsoft.VisualBasic.ApplicationServices;
 using System.Drawing.Printing;
 
@@ -6,13 +8,13 @@ namespace June2026.WinFormsApp2
 {
     public partial class FrmUser : Form
     {
-        private readonly AppDbContext _db;
+        private readonly UserService _userService;
         private int editUserId = 0;
 
         public FrmUser()
         {
             InitializeComponent();
-            _db = new AppDbContext();
+            _userService = new UserService();
         }
 
         private void FrmUser_Load(object sender, EventArgs e)
@@ -22,35 +24,24 @@ namespace June2026.WinFormsApp2
 
         private void BindData()
         {
-            var lst = _db.TblUsers.ToList();
+            var response = _userService.GetUsers(new UserListRequestModel());
+            if (!response.IsSuccess)
+            {
+                MessageBox.Show(response.Message);
+                return;
+            }
 
             int rowNo = 0;
             List<UserDto> users = new List<UserDto>();
-            foreach (var item in lst)
+            foreach (var item in response.Users)
             {
                 rowNo++;
                 UserDto user = new UserDto();
                 user.RowNo = rowNo;
                 user.UserId = item.UserId;
                 user.Username = item.Username;
-                user.Password = item.Password;
 
                 users.Add(user);
-
-                //UserDto user2 = new UserDto()
-                //{
-                //    Username = item.Username,
-                //    Password = item.Password,
-                //    UserId = item.UserId,
-                //    RowNo = rowNo
-                //};
-
-                //users.Add(new UserDto
-                //{
-                //     UserId = item.UserId,
-                //     Username = item.Username,
-                //     Password = item.Password
-                //});
             }
 
             dgvData.DataSource = users;
@@ -63,7 +54,7 @@ namespace June2026.WinFormsApp2
             public int RowNo { get; set; }
             public int UserId { get; set; }
             public string Username { get; set; }
-            public string Password { get; set; }
+            public string? Password { get; set; }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -80,25 +71,24 @@ namespace June2026.WinFormsApp2
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if(editUserId == 0)
+            if (editUserId == 0)
             {
-                _db.TblUsers.Add(new TblUser
+                var response = _userService.CreateUser(new UserCreateRequestModel
                 {
-                    Password = txtPassword.Text.Trim(), // " mg mg "
                     Username = txtUsername.Text.Trim(),
+                    Password = txtPassword.Text.Trim()
                 });
-                _db.SaveChanges();
+                MessageBox.Show(response.Message);
             }
             else
             {
-                var item = _db.TblUsers
-                       .Where(x => x.UserId == editUserId)
-                       .FirstOrDefault();
-
-                if (item is null) return;
-
-                item.Username = txtUsername.Text.Trim();
-                item.Password = txtPassword.Text.Trim();
+                var response = _userService.PatchUser(new UserPatchRequestModel
+                {
+                    UserId = editUserId,
+                    Username = txtUsername.Text.Trim(),
+                    Password = txtPassword.Text.Trim()
+                });
+                MessageBox.Show(response.Message);
             }
 
             editUserId = 0;
@@ -113,15 +103,17 @@ namespace June2026.WinFormsApp2
             if (e.ColumnIndex == 0) // Edit
             {
                 int userId = Convert.ToInt32(dgvData.Rows[e.RowIndex].Cells[nameof(colUserId)].Value);
-                var item = _db.TblUsers
-                    .Where(x => x.UserId == userId)
-                    .FirstOrDefault();
+                var response = _userService.GetUser(new UserEditRequestModel { UserId = userId });
 
-                if (item is null) return;
+                if (!response.IsSuccess)
+                {
+                    MessageBox.Show(response.Message);
+                    return;
+                }
 
-                txtUsername.Text = item.Username;
-                txtPassword.Text = item.Password;
-                editUserId = item.UserId;
+                txtUsername.Text = response.UserName;
+                txtPassword.Text = string.Empty;
+                editUserId = response.UserId;
             }
             else if (e.ColumnIndex == 1) // Delete
             {
@@ -129,14 +121,8 @@ namespace June2026.WinFormsApp2
                 if (result == DialogResult.Yes)
                 {
                     int userId = Convert.ToInt32(dgvData.Rows[e.RowIndex].Cells[nameof(colUserId)].Value);
-                    var item = _db.TblUsers
-                        .Where(x => x.UserId == userId)
-                        .FirstOrDefault();
-
-                    if (item is null) return;
-
-                    _db.Remove(item);
-                    _db.SaveChanges();
+                    var response = _userService.DeleteUser(new UserDeleteRequestModel { UserId = userId });
+                    MessageBox.Show(response.Message);
 
                     BindData();
                 }

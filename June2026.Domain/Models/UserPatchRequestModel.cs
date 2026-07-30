@@ -1,7 +1,8 @@
-﻿namespace June2026.WebApi.Models;
+﻿namespace June2026.Domain.Models;
 
 public class UserPatchRequestModel
 {
+    public int UserId { get; set; } 
     public string? Username { get; set; }
     public string? Password { get; set; }
 }

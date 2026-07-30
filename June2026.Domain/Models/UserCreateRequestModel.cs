@@ -1,4 +1,4 @@
-﻿namespace June2026.WebApi.Models;
+﻿namespace June2026.Domain.Models;
 
 public class UserCreateRequestModel
 {

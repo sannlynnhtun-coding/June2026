@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\June2026.Database\June2026.Database.csproj" />
+    <ProjectReference Include="..\June2026.Domain\June2026.Domain.csproj" />
   </ItemGroup>
 
 </Project>
