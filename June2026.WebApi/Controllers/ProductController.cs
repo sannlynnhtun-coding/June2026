@@ -8,11 +8,11 @@ namespace June2026.WebApi.Controllers;
 [ApiController]
 public class ProductController : ControllerBase
 {
-    private readonly ProductService _productService;
+    private readonly IProductService _productService;
 
-    public ProductController()
+    public ProductController(IProductService productService)
     {
-        _productService = new ProductService();
+        _productService = productService;
     }
 
     [HttpGet]

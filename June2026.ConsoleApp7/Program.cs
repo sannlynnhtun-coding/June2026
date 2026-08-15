@@ -1,13 +1,28 @@
 using System;
 using System.Collections.Generic;
+using June2026.Database.AppDbContextModels;
 using June2026.Domain.Features.User;
 using June2026.Domain.Features.Product;
 using June2026.Domain.Features.Sale;
 using June2026.Domain.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
-var userService = new UserService();
-var productService = new ProductService();
-var saleService = new SaleService();
+const string connectionString =
+    "Server=.;Database=June2026Db;User Id=sa;Password=sasa@123;TrustServerCertificate=True;";
+
+var services = new ServiceCollection();
+services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+services.AddScoped<UserService>();
+services.AddScoped<IProductService, ProductService>();
+services.AddScoped<SaleService>();
+
+using ServiceProvider serviceProvider = services.BuildServiceProvider();
+using IServiceScope scope = serviceProvider.CreateScope();
+
+var userService = scope.ServiceProvider.GetRequiredService<UserService>();
+var productService = scope.ServiceProvider.GetRequiredService<IProductService>();
+var saleService = scope.ServiceProvider.GetRequiredService<SaleService>();
 
 MainMenu:
 Console.WriteLine("\n=== Main Menu ===");

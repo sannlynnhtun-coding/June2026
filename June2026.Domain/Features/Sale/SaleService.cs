@@ -10,9 +10,9 @@ public class SaleService
 {
     private readonly AppDbContext _db;
 
-    public SaleService()
+    public SaleService(AppDbContext db)
     {
-        _db = new AppDbContext();
+        _db = db;
     }
 
     public SaleCreateResponseModel CreateSale(SaleCreateRequestModel requestModel)

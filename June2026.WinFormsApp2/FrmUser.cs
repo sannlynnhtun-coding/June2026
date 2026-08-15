@@ -11,10 +11,10 @@ namespace June2026.WinFormsApp2
         private readonly UserService _userService;
         private int editUserId = 0;
 
-        public FrmUser()
+        public FrmUser(UserService userService)
         {
             InitializeComponent();
-            _userService = new UserService();
+            _userService = userService;
         }
 
         private void FrmUser_Load(object sender, EventArgs e)

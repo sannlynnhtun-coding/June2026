@@ -6,11 +6,11 @@ using System.Linq;
 
 namespace June2026.Domain.Features.Product;
 
-public class ProductService : IProductService
+public class ProductV2Service : IProductService
 {
     private readonly AppDbContext _db;
 
-    public ProductService(AppDbContext db)
+    public ProductV2Service(AppDbContext db)
     {
         _db = db;
     }

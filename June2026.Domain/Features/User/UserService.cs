@@ -12,9 +12,9 @@ public class UserService
 {
     private readonly AppDbContext _db;
 
-    public UserService()
+    public UserService(AppDbContext db)
     {
-        _db = new AppDbContext();
+        _db = db;
     }
 
     public UserListResponseModel GetUsers(UserListRequestModel requestModel)

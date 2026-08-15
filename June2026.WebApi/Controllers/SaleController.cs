@@ -1,4 +1,5 @@
 using June2026.Domain.Features.Sale;
+using June2026.Domain.Features.User;
 using June2026.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,12 @@ namespace June2026.WebApi.Controllers;
 public class SaleController : ControllerBase
 {
     private readonly SaleService _saleService;
+    private readonly UserService _userService;
 
-    public SaleController()
+    public SaleController(SaleService saleService, UserService userService)
     {
-        _saleService = new SaleService();
+        _saleService = saleService;
+        _userService = userService;
     }
 
     [HttpGet]
