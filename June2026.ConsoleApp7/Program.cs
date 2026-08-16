@@ -79,7 +79,7 @@ if (!int.TryParse(Console.ReadLine()!, out int userOpt))
 
 if (userOpt == 1)
 {
-    var response = userService.GetUsers(new UserListRequestModel());
+    var response = await userService.GetUsersAsync(new UserListRequestModel());
     if (response.IsSuccess)
     {
         int count = 0;
@@ -101,7 +101,7 @@ else if (userOpt == 2)
     Console.Write("Enter Password: ");
     string password = Console.ReadLine()!;
 
-    var response = userService.CreateUser(new UserCreateRequestModel { Username = username, Password = password });
+    var response = await userService.CreateUserAsync(new UserCreateRequestModel { Username = username, Password = password });
     Console.WriteLine(response.Message);
     if (response.IsSuccess)
     {
@@ -122,7 +122,7 @@ else if (userOpt == 3)
     Console.Write("Enter Password: ");
     string password = Console.ReadLine()!;
 
-    var response = userService.PatchUser(new UserPatchRequestModel { UserId = userId, Username = username, Password = password });
+    var response = await userService.PatchUserAsync(new UserPatchRequestModel { UserId = userId, Username = username, Password = password });
     Console.WriteLine(response.Message);
     goto UserMenu;
 }
@@ -135,7 +135,7 @@ else if (userOpt == 4)
         goto UserMenu;
     }
 
-    var response = userService.DeleteUser(new UserDeleteRequestModel { UserId = userId });
+    var response = await userService.DeleteUserAsync(new UserDeleteRequestModel { UserId = userId });
     Console.WriteLine(response.Message);
     goto UserMenu;
 }
@@ -168,7 +168,7 @@ if (!int.TryParse(Console.ReadLine()!, out int prodOpt))
 
 if (prodOpt == 1)
 {
-    var response = productService.GetProducts();
+    var response = await productService.GetProductsAsync();
     if (response.IsSuccess)
     {
         int count = 0;
@@ -202,7 +202,7 @@ else if (prodOpt == 2)
         goto ProductMenu;
     }
 
-    var response = productService.CreateProduct(new ProductCreateRequestModel
+    var response = await productService.CreateProductAsync(new ProductCreateRequestModel
     {
         ProductCode = code,
         ProductName = name,
@@ -231,7 +231,7 @@ else if (prodOpt == 3)
     string qtyInput = Console.ReadLine()!;
     int? qty = string.IsNullOrEmpty(qtyInput) ? null : int.Parse(qtyInput);
 
-    var response = productService.PatchProduct(new ProductPatchRequestModel
+    var response = await productService.PatchProductAsync(new ProductPatchRequestModel
     {
         ProductId = prodId,
         ProductCode = code,
@@ -251,7 +251,7 @@ else if (prodOpt == 4)
         goto ProductMenu;
     }
 
-    var response = productService.DeleteProduct(new ProductDeleteRequestModel { ProductId = prodId });
+    var response = await productService.DeleteProductAsync(new ProductDeleteRequestModel { ProductId = prodId });
     Console.WriteLine(response.Message);
     goto ProductMenu;
 }
@@ -282,7 +282,7 @@ if (!int.TryParse(Console.ReadLine()!, out int saleOpt))
 
 if (saleOpt == 1)
 {
-    var response = saleService.GetSales();
+    var response = await saleService.GetSalesAsync();
     if (response.IsSuccess)
     {
         foreach (var sale in response.Sales)
@@ -336,7 +336,7 @@ else if (saleOpt == 2)
         goto SaleMenu;
     }
 
-    var response = saleService.CreateSale(new SaleCreateRequestModel
+    var response = await saleService.CreateSaleAsync(new SaleCreateRequestModel
     {
         VoucherNo = voucherNo,
         SaleDateTime = DateTime.Now,
