@@ -1,5 +1,6 @@
 using June2026.Database.AppDbContextModels;
 using June2026.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,9 @@ public class SaleService
         _db = db;
     }
 
-    public SaleCreateResponseModel CreateSale(SaleCreateRequestModel requestModel)
+    public async Task<SaleCreateResponseModel> CreateSaleAsync(SaleCreateRequestModel requestModel)
     {
-        using var transaction = _db.Database.BeginTransaction();
+        await using var transaction = await _db.Database.BeginTransactionAsync();
         try
         {
             if (string.IsNullOrEmpty(requestModel.VoucherNo))
@@ -30,7 +31,8 @@ public class SaleService
             }
 
             // Check if voucher no already exists
-            var existingSale = _db.TblSales.FirstOrDefault(x => x.VoucherNo == requestModel.VoucherNo && !x.IsDelete);
+            var existingSale = await _db.TblSales
+                .FirstOrDefaultAsync(x => x.VoucherNo == requestModel.VoucherNo && !x.IsDelete);
             if (existingSale is not null)
             {
                 return new SaleCreateResponseModel
@@ -45,7 +47,8 @@ public class SaleService
 
             foreach (var detailReq in requestModel.SaleDetails)
             {
-                var product = _db.TblProducts.FirstOrDefault(x => x.ProductId == detailReq.ProductId && !x.IsDelete);
+                var product = await _db.TblProducts
+                    .FirstOrDefaultAsync(x => x.ProductId == detailReq.ProductId && !x.IsDelete);
                 if (product is null)
                 {
                     return new SaleCreateResponseModel
@@ -98,8 +101,8 @@ public class SaleService
             _db.TblSales.Add(sale);
             _db.TblSaleDetails.AddRange(detailsToSave);
 
-            _db.SaveChanges();
-            transaction.Commit();
+            await _db.SaveChangesAsync();
+            await transaction.CommitAsync();
 
             return new SaleCreateResponseModel
             {
@@ -110,7 +113,7 @@ public class SaleService
         }
         catch (Exception ex)
         {
-            transaction.Rollback();
+            await transaction.RollbackAsync();
             return new SaleCreateResponseModel
             {
                 IsSuccess = false,
@@ -119,11 +122,14 @@ public class SaleService
         }
     }
 
-    public SaleListResponseModel GetSales()
+    public async Task<SaleListResponseModel> GetSalesAsync()
     {
         try
         {
-            var sales = _db.TblSales.Where(x => !x.IsDelete).ToList();
+            var sales = await _db.TblSales
+                .AsNoTracking()
+                .Where(x => !x.IsDelete)
+                .ToListAsync();
             var resultList = new List<SaleModel>();
 
             foreach (var sale in sales)
@@ -137,13 +143,16 @@ public class SaleService
                     SaleDetails = new List<SaleDetailModel>()
                 };
 
-                var details = _db.TblSaleDetails
+                var details = await _db.TblSaleDetails
+                    .AsNoTracking()
                     .Where(x => x.SaleVoucherNo == sale.VoucherNo && !x.IsDelete)
-                    .ToList();
+                    .ToListAsync();
 
                 foreach (var detail in details)
                 {
-                    var product = _db.TblProducts.FirstOrDefault(x => x.ProductId == detail.ProductId);
+                    var product = await _db.TblProducts
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(x => x.ProductId == detail.ProductId);
                     saleModel.SaleDetails.Add(new SaleDetailModel
                     {
                         SaleDetailId = detail.SaleDetailId,

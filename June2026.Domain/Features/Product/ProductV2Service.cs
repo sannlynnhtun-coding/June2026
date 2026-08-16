@@ -1,5 +1,6 @@
 using June2026.Database.AppDbContextModels;
 using June2026.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +16,13 @@ public class ProductV2Service : IProductService
         _db = db;
     }
 
-    public ProductListResponseModel GetProducts()
+    public async Task<ProductListResponseModel> GetProductsAsync()
     {
         try
         {
-            var lst = _db.TblProducts
+            var lst = await _db.TblProducts
                 .Where(x => !x.IsDelete)
-                .ToList();
+                .ToListAsync();
 
             var products = lst.Select(item => new ProductModel
             {
@@ -50,11 +51,13 @@ public class ProductV2Service : IProductService
         }
     }
 
-    public ProductEditResponseModel GetProduct(ProductEditRequestModel requestModel)
+    public async Task<ProductEditResponseModel> GetProductAsync(ProductEditRequestModel requestModel)
     {
         try
         {
-            var item = _db.TblProducts.FirstOrDefault(x => x.ProductId == requestModel.ProductId && !x.IsDelete);
+            var item = await _db.TblProducts
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ProductId == requestModel.ProductId && !x.IsDelete);
             if (item is null)
             {
                 return new ProductEditResponseModel
@@ -85,7 +88,7 @@ public class ProductV2Service : IProductService
         }
     }
 
-    public ProductCreateResponseModel CreateProduct(ProductCreateRequestModel requestModel)
+    public async Task<ProductCreateResponseModel> CreateProductAsync(ProductCreateRequestModel requestModel)
     {
         try
         {
@@ -100,7 +103,7 @@ public class ProductV2Service : IProductService
             };
 
             _db.TblProducts.Add(product);
-            int result = _db.SaveChanges();
+            int result = await _db.SaveChangesAsync();
 
             return new ProductCreateResponseModel
             {
@@ -119,11 +122,12 @@ public class ProductV2Service : IProductService
         }
     }
 
-    public ProductPatchResponseModel PatchProduct(ProductPatchRequestModel requestModel)
+    public async Task<ProductPatchResponseModel> PatchProductAsync(ProductPatchRequestModel requestModel)
     {
         try
         {
-            var item = _db.TblProducts.FirstOrDefault(x => x.ProductId == requestModel.ProductId && !x.IsDelete);
+            var item = await _db.TblProducts
+                .FirstOrDefaultAsync(x => x.ProductId == requestModel.ProductId && !x.IsDelete);
             if (item is null)
             {
                 return new ProductPatchResponseModel
@@ -152,7 +156,7 @@ public class ProductV2Service : IProductService
 
             item.ModifiedDateTime = DateTime.Now;
 
-            int result = _db.SaveChanges();
+            int result = await _db.SaveChangesAsync();
 
             return new ProductPatchResponseModel
             {
@@ -170,11 +174,12 @@ public class ProductV2Service : IProductService
         }
     }
 
-    public ProductDeleteResponseModel DeleteProduct(ProductDeleteRequestModel requestModel)
+    public async Task<ProductDeleteResponseModel> DeleteProductAsync(ProductDeleteRequestModel requestModel)
     {
         try
         {
-            var item = _db.TblProducts.FirstOrDefault(x => x.ProductId == requestModel.ProductId && !x.IsDelete);
+            var item = await _db.TblProducts
+                .FirstOrDefaultAsync(x => x.ProductId == requestModel.ProductId && !x.IsDelete);
             if (item is null)
             {
                 return new ProductDeleteResponseModel
@@ -187,7 +192,7 @@ public class ProductV2Service : IProductService
             item.IsDelete = true;
             item.ModifiedDateTime = DateTime.Now;
 
-            int result = _db.SaveChanges();
+            int result = await _db.SaveChangesAsync();
 
             return new ProductDeleteResponseModel
             {
