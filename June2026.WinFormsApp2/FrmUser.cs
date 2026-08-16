@@ -17,14 +17,14 @@ namespace June2026.WinFormsApp2
             _userService = userService;
         }
 
-        private void FrmUser_Load(object sender, EventArgs e)
+        private async void FrmUser_LoadAsync(object sender, EventArgs e)
         {
-            BindData();
+            await BindDataAsync();
         }
 
-        private void BindData()
+        private async Task BindDataAsync()
         {
-            var response = _userService.GetUsers(new UserListRequestModel());
+            var response = await _userService.GetUsersAsync(new UserListRequestModel());
             if (!response.IsSuccess)
             {
                 MessageBox.Show(response.Message);
@@ -69,11 +69,11 @@ namespace June2026.WinFormsApp2
             txtUsername.Focus();
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private async void btnSave_ClickAsync(object sender, EventArgs e)
         {
             if (editUserId == 0)
             {
-                var response = _userService.CreateUser(new UserCreateRequestModel
+                var response = await _userService.CreateUserAsync(new UserCreateRequestModel
                 {
                     Username = txtUsername.Text.Trim(),
                     Password = txtPassword.Text.Trim()
@@ -82,7 +82,7 @@ namespace June2026.WinFormsApp2
             }
             else
             {
-                var response = _userService.PatchUser(new UserPatchRequestModel
+                var response = await _userService.PatchUserAsync(new UserPatchRequestModel
                 {
                     UserId = editUserId,
                     Username = txtUsername.Text.Trim(),
@@ -93,17 +93,17 @@ namespace June2026.WinFormsApp2
 
             editUserId = 0;
 
-            BindData();
+            await BindDataAsync();
         }
 
-        private void dgvData_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private async void dgvData_CellContentClickAsync(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex == -1) return;
 
             if (e.ColumnIndex == 0) // Edit
             {
                 int userId = Convert.ToInt32(dgvData.Rows[e.RowIndex].Cells[nameof(colUserId)].Value);
-                var response = _userService.GetUser(new UserEditRequestModel { UserId = userId });
+                var response = await _userService.GetUserAsync(new UserEditRequestModel { UserId = userId });
 
                 if (!response.IsSuccess)
                 {
@@ -121,10 +121,10 @@ namespace June2026.WinFormsApp2
                 if (result == DialogResult.Yes)
                 {
                     int userId = Convert.ToInt32(dgvData.Rows[e.RowIndex].Cells[nameof(colUserId)].Value);
-                    var response = _userService.DeleteUser(new UserDeleteRequestModel { UserId = userId });
+                    var response = await _userService.DeleteUserAsync(new UserDeleteRequestModel { UserId = userId });
                     MessageBox.Show(response.Message);
 
-                    BindData();
+                    await BindDataAsync();
                 }
             }
         }

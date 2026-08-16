@@ -58,7 +58,7 @@
             dgvData.RowHeadersWidth = 82;
             dgvData.Size = new Size(800, 454);
             dgvData.TabIndex = 7;
-            dgvData.CellContentClick += dgvData_CellContentClick;
+            dgvData.CellContentClick += dgvData_CellContentClickAsync;
             // 
             // colEdit
             // 
@@ -134,7 +134,7 @@
             btnSave.TabIndex = 5;
             btnSave.Text = "&Save";
             btnSave.UseVisualStyleBackColor = true;
-            btnSave.Click += btnSave_Click;
+            btnSave.Click += btnSave_ClickAsync;
             // 
             // label2
             // 
@@ -178,7 +178,7 @@
             Name = "FrmUser";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";
-            Load += FrmUser_Load;
+            Load += FrmUser_LoadAsync;
             ((System.ComponentModel.ISupportInitialize)dgvData).EndInit();
             ResumeLayout(false);
             PerformLayout();
