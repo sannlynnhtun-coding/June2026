@@ -16,46 +16,46 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetProducts()
+    public async Task<IActionResult> GetProductsAsync()
     {
-        var result = _productService.GetProducts();
+        var result = await _productService.GetProductsAsync();
         if (result.IsSuccess)
             return Ok(result);
         return BadRequest(result);
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetProduct(int id)
+    public async Task<IActionResult> GetProductAsync(int id)
     {
-        var result = _productService.GetProduct(new ProductEditRequestModel { ProductId = id });
+        var result = await _productService.GetProductAsync(new ProductEditRequestModel { ProductId = id });
         if (result.IsSuccess)
             return Ok(result);
         return BadRequest(result);
     }
 
     [HttpPost]
-    public IActionResult CreateProduct([FromBody] ProductCreateRequestModel requestModel)
+    public async Task<IActionResult> CreateProductAsync([FromBody] ProductCreateRequestModel requestModel)
     {
-        var result = _productService.CreateProduct(requestModel);
+        var result = await _productService.CreateProductAsync(requestModel);
         if (result.IsSuccess)
             return Ok(result);
         return BadRequest(result);
     }
 
     [HttpPatch("{id}")]
-    public IActionResult PatchProduct(int id, [FromBody] ProductPatchRequestModel requestModel)
+    public async Task<IActionResult> PatchProductAsync(int id, [FromBody] ProductPatchRequestModel requestModel)
     {
         requestModel.ProductId = id;
-        var result = _productService.PatchProduct(requestModel);
+        var result = await _productService.PatchProductAsync(requestModel);
         if (result.IsSuccess)
             return Ok(result);
         return BadRequest(result);
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteProduct(int id)
+    public async Task<IActionResult> DeleteProductAsync(int id)
     {
-        var result = _productService.DeleteProduct(new ProductDeleteRequestModel { ProductId = id });
+        var result = await _productService.DeleteProductAsync(new ProductDeleteRequestModel { ProductId = id });
         if (result.IsSuccess)
             return Ok(result);
         return BadRequest(result);

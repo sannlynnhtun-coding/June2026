@@ -19,18 +19,18 @@ public class SaleController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetSales()
+    public async Task<IActionResult> GetSalesAsync()
     {
-        var result = _saleService.GetSales();
+        var result = await _saleService.GetSalesAsync();
         if (result.IsSuccess)
             return Ok(result);
         return BadRequest(result);
     }
 
     [HttpPost]
-    public IActionResult CreateSale([FromBody] SaleCreateRequestModel requestModel)
+    public async Task<IActionResult> CreateSaleAsync([FromBody] SaleCreateRequestModel requestModel)
     {
-        var result = _saleService.CreateSale(requestModel);
+        var result = await _saleService.CreateSaleAsync(requestModel);
         if (result.IsSuccess)
             return Ok(result);
         return BadRequest(result);

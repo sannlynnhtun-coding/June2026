@@ -19,9 +19,9 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetUsers()
+    public async Task<IActionResult> GetUsersAsync()
     {
-        var model = _userService.GetUsers(new UserListRequestModel());
+        var model = await _userService.GetUsersAsync(new UserListRequestModel());
         if (model.IsSuccess)
         {
             return Ok(model);
@@ -36,29 +36,29 @@ public class UserController : ControllerBase
     // api/user/1
     [HttpGet("edit/{id}")]
     [HttpGet("{id}")]
-    public IActionResult GetUser(int id)
+    public async Task<IActionResult> GetUserAsync(int id)
     {
-        return Ok(_userService.GetUser(new UserEditRequestModel { UserId = id }));
+        return Ok(await _userService.GetUserAsync(new UserEditRequestModel { UserId = id }));
     }
 
     [HttpPost]
-    public IActionResult CreateUser([FromBody] UserCreateRequestModel requestModel)
+    public async Task<IActionResult> CreateUserAsync([FromBody] UserCreateRequestModel requestModel)
     {
-        return Ok(_userService.CreateUser(requestModel));
+        return Ok(await _userService.CreateUserAsync(requestModel));
     }
 
     [HttpPatch("{id}")]
-    public IActionResult PatchUser(int id, UserPatchRequestModel requestModel)
+    public async Task<IActionResult> PatchUserAsync(int id, UserPatchRequestModel requestModel)
     {
         requestModel.UserId = id;
-        return Ok(_userService.PatchUser(requestModel));
+        return Ok(await _userService.PatchUserAsync(requestModel));
     }
 
     // api/user?userId=1 => [FromQuery]
     [HttpDelete("{UserId}")]
-    public IActionResult DeleteUser([FromRoute] UserDeleteRequestModel requestModel)
+    public async Task<IActionResult> DeleteUserAsync([FromRoute] UserDeleteRequestModel requestModel)
     {
-        return Ok(_userService.DeleteUser(requestModel));
+        return Ok(await _userService.DeleteUserAsync(requestModel));
     }
 }
 
