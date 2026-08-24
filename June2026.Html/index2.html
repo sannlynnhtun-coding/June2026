@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="mb-3">
+        <label for="blogTitle" class="form-label">Blog Title</label>
+        <input type="text" class="form-control" id="blogTitle" placeholder="Enter blog title">
+    </div>
+
+    <div class="mb-3">
+        <label for="blogAuthor" class="form-label">Blog Author</label>
+        <input type="text" class="form-control" id="blogAuthor" placeholder="Enter author name">
+    </div>
+
+    <div class="mb-3">
+        <label for="blogContent" class="form-label">Blog Content</label>
+        <input type="text" class="form-control" id="blogContent" placeholder="Enter blog content">
+    </div>
+
+    <!-- <button type="button" class="btn btn-success" onclick="saveData()">Save</button> -->
+    <button type="button" class="btn btn-success" id="btnSave">Save</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+    <script src="/js/jquery-4.0.0.min.js"></script>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script> -->
+    <script>
+        // function saveData(){
+        //     alert('Heehee');
+        // }
+
+        $('#btnSave').click(function(){
+            //    alert('Heehee');
+            let title = $('#blogTitle').val();
+            let author = $('#blogAuthor').val();
+            let content = $('#blogContent').val();
+            //  $('#blogTitle').val('Testing');
+
+            localStorage.setItem("title", title);
+            localStorage.setItem("author", author);
+            localStorage.setItem("content", content);
+        })
+    </script>
+</body>
+
+</html>
