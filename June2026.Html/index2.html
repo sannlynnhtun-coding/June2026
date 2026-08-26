@@ -28,6 +28,48 @@
     <!-- <button type="button" class="btn btn-success" onclick="saveData()">Save</button> -->
     <button type="button" class="btn btn-success" id="btnSave">Save</button>
 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Actions</th>
+                <th scope="col">No.</th>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Content</th>
+            </tr>
+        </thead>
+        <tbody id="tableData">
+            <!-- <tr>
+                <td>
+                    <button type="button" class="btn btn-outline-warning" onclick="editBlog('${blog.id}')">Edit</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="deleteBlog('${blog.id}')">Delete</button>
+                </td>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr> -->
+            <!-- <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>John</td>
+                <td>Doe</td>
+                <td>@social</td>
+            </tr> -->
+        </tbody>
+    </table>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
@@ -40,17 +82,160 @@
         //     alert('Heehee');
         // }
 
-        $('#btnSave').click(function(){
+        loadBlogs();
+
+        $('#btnSave').click(function () {
+            if (_editId == null) {
+                saveBlog();
+            }
+            else {
+                updateBlog();
+
+                _editId = null;
+            }
+        })
+
+        function updateBlog() {
+            let _title = $('#blogTitle').val();
+            let _author = $('#blogAuthor').val();
+            let _content = $('#blogContent').val();
+
+            let jsonBlogs = localStorage.getItem("blogs"); // text
+            let blogs = [];
+            if (jsonBlogs != null) {
+                blogs = JSON.parse(jsonBlogs); // text/json to object array
+            }
+
+            let index = blogs.findIndex(x => x.id == _editId);
+
+            if (index == -1) {
+                alert("No data found.");
+                return;
+            }
+
+            blogs[index].title = _title;
+            blogs[index].author = _author;
+            blogs[index].content = _content;
+
+            let _jsonStr = JSON.stringify(blogs);
+            localStorage.setItem("blogs", _jsonStr);
+
+            loadBlogs();
+        }
+
+        function saveBlog() {
             //    alert('Heehee');
-            let title = $('#blogTitle').val();
-            let author = $('#blogAuthor').val();
-            let content = $('#blogContent').val();
+            let _title = $('#blogTitle').val();
+            let _author = $('#blogAuthor').val();
+            let _content = $('#blogContent').val();
             //  $('#blogTitle').val('Testing');
 
-            localStorage.setItem("title", title);
-            localStorage.setItem("author", author);
-            localStorage.setItem("content", content);
-        })
+            let blog = {
+                id: crypto.randomUUID(),
+                title: _title,
+                author: _author,
+                content: _content
+            };
+
+            // localStorage.setItem("title", title);
+            // localStorage.setItem("author", author);
+            // localStorage.setItem("content", content);
+
+            // let _jsonStr = JSON.stringify(blog); // object to json (string/text)
+
+            // localStorage.setItem("blogs", _jsonStr);
+
+            let jsonBlogs = localStorage.getItem("blogs"); // text
+            let blogs = [];
+            // if (jsonBlogs == null) {
+            //     blogs = [];
+            // }
+            // else {
+            //     blogs = JSON.parse(jsonBlogs); // text/json to object array
+            // }
+
+            if (jsonBlogs != null) {
+                blogs = JSON.parse(jsonBlogs); // text/json to object array
+            }
+
+            blogs.push(blog); //[0],[1],[2]
+
+            let _jsonStr = JSON.stringify(blogs);
+            localStorage.setItem("blogs", _jsonStr);
+
+            loadBlogs();
+        }
+
+        function loadBlogs() {
+            $('#tableData').html('');
+
+            let jsonBlogs = localStorage.getItem("blogs");
+            let blogs = [];
+            if (jsonBlogs != null) {
+                blogs = JSON.parse(jsonBlogs); // text/json to object array
+            }
+
+            for (let i = 0; i < blogs.length; i++) {
+                const blog = blogs[i];
+
+                let trRow = `
+                <tr>
+                    <td>
+                        <button type="button" class="btn btn-outline-warning" onclick="editBlog('${blog.id}')">Edit</button>
+                        <button type="button" class="btn btn-outline-danger" onclick="deleteBlog('${blog.id}')">Delete</button>
+                    </td>
+                    <th scope="row">${i + 1}</th>
+                    <td>${blog.title}</td>
+                    <td>${blog.author}</td>
+                    <td>${blog.content}</td>
+                </tr>
+                `;
+
+                $('#tableData').append(trRow);
+            }
+        }
+
+        let _editId = null;
+        function editBlog(id) {
+            let jsonBlogs = localStorage.getItem("blogs");
+            let blogs = [];
+            if (jsonBlogs != null) {
+                blogs = JSON.parse(jsonBlogs); // text/json to object array
+            }
+
+            let filterBlogs = blogs.filter(x => x.id == id);
+            if (filterBlogs.length == 0) return;
+
+            let blog = filterBlogs[0];
+
+            $('#blogTitle').val(blog.title);
+            $('#blogAuthor').val(blog.author);
+            $('#blogContent').val(blog.content);
+
+            _editId = blog.id;
+        }
+
+        function deleteBlog(id) {
+            let confirmMessageResult = confirm("are you sure want to delete?");
+            // if(confirmMessageResult == false) return;
+            if (!confirmMessageResult) return;
+
+            let jsonBlogs = localStorage.getItem("blogs");
+            let blogs = [];
+            if (jsonBlogs != null) {
+                blogs = JSON.parse(jsonBlogs); // text/json to object array
+            }
+
+            let index = blogs.findIndex(x => x.id == id);
+            if (index == -1) return;
+
+            let filterBlogs = blogs.filter(x => x.id != id);
+
+            let _jsonStr = JSON.stringify(filterBlogs);
+            localStorage.setItem("blogs", _jsonStr);
+
+            loadBlogs();
+        }
     </script>
 </body>
 

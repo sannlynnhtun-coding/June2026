@@ -1,0 +1,1 @@
+﻿global using June2026.Domain.Models;
