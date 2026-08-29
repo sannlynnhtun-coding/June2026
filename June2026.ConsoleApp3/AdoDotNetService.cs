@@ -10,7 +10,9 @@ namespace June2026.ConsoleApp3;
 
 internal class AdoDotNetService
 {
-    public void Read()
+    private readonly DbService _dbService;
+
+    public AdoDotNetService()
     {
         SqlConnectionStringBuilder sb = new SqlConnectionStringBuilder();
         sb.DataSource = "."; //(local) // server name
@@ -18,35 +20,14 @@ internal class AdoDotNetService
         sb.UserID = "sa";
         sb.Password = "sasa@123";
         sb.TrustServerCertificate = true;
+        _dbService = new DbService(sb);
+    }
 
-        Console.WriteLine($"connection stirng: {sb.ConnectionString}");
-
-        SqlConnection connection = new SqlConnection(sb.ConnectionString);
-        Console.WriteLine("Connection opening...");
-        connection.Open();
-        Console.WriteLine("Connection opened.");
-
+    public void Read()
+    {
         string query = @"SELECT *
   FROM [dbo].[Tbl_Student];";
-        SqlCommand cmd = new SqlCommand(query, connection);
-        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-        DataTable dt = new DataTable();
-        adapter.Fill(dt);
-        //DataSet ds = new DataSet();
-        //adapter.Fill(ds);
-
-        Console.WriteLine("Connection closing...");
-        connection.Close();
-        Console.WriteLine("Connection closed.");
-
-        // DataSet
-        // DataTable
-        // DataRow
-        // DataColumn
-
-        // 12-11-2025
-        // 2025-11-12
-
+        var dt = _dbService.Query(query);
         foreach (DataRow item in dt.Rows)
         {
             Console.WriteLine(item["StudentId"]);
@@ -59,85 +40,65 @@ internal class AdoDotNetService
 
     public void Create()
     {
-        SqlConnectionStringBuilder sb = new SqlConnectionStringBuilder();
-        sb.DataSource = "."; //(local) // server name
-        sb.InitialCatalog = "June2026Db"; // database name
-        sb.UserID = "sa";
-        sb.Password = "sasa@123";
-        sb.TrustServerCertificate = true;
-
-        SqlConnection connection = new SqlConnection(sb.ConnectionString);
-        connection.Open();
-
-        string query = @"INSERT INTO [dbo].[Tbl_Student]
-           ([StudentName]
-           ,[FatherName]
-           ,[StudentNo]
-           ,[Email]
-           ,[DateOfBirth]
-           ,[MobileNo]
-           ,[IsDelete])
+        string query = @"
+INSERT INTO dbo.Tbl_Student
+(StudentName, FatherName, StudentNo, Email, DateOfBirth, MobileNo, IsDelete)
 VALUES
-('Aung Kyaw Min', 'Kyaw Soe', 'STU001', 'aung.kyaw@example.com', '2001-03-15', '09123456789', 0),
-('Su Su Hlaing', 'Win Naing', 'STU002', 'susu.hlaing@example.com', '2002-07-22', '09234567890', 0),
-('Zaw Lin Htet', 'Than Tun', 'STU003', 'zaw.lin@example.com', '2000-11-08', '09345678901', 0),
-('Ei Ei Mon', 'Aung Myint', 'STU004', 'eiei.mon@example.com', '2001-01-30', '09456789012', 0),
-('Htet Naing Oo', 'Tin Maung', 'STU005', 'htet.naing@example.com', '2003-09-12', '09567890123', 0);";
-        SqlCommand cmd = new SqlCommand(query, connection);
-        int result = cmd.ExecuteNonQuery();
+(@StudentName, @FatherName, @StudentNo, @Email, @DateOfBirth, @MobileNo, @IsDelete);";
 
-        connection.Close();
+        var parameters = new List<SqlParameterDto>
+    {
+        new(){ Name="@StudentName", Value="Aung Kyaw Min"},
+        new(){ Name="@FatherName", Value="Kyaw Soe"},
+        new(){ Name="@StudentNo", Value="STU001"},
+        new(){ Name="@Email", Value="aung.kyaw@example.com"},
+        new(){ Name="@DateOfBirth", Value=new DateTime(2001,3,15)},
+        new(){ Name="@MobileNo", Value="09123456789"},
+        new(){ Name="@IsDelete", Value=false}
+    };
+
+        int result = _dbService.Execute(query, parameters);
+
+        Console.WriteLine($"{result} row inserted.");
     }
 
     public void Update()
     {
-        SqlConnectionStringBuilder sb = new SqlConnectionStringBuilder();
-        sb.DataSource = "."; //(local) // server name
-        sb.InitialCatalog = "June2026Db"; // database name
-        sb.UserID = "sa";
-        sb.Password = "sasa@123";
-        sb.TrustServerCertificate = true;
+        string query = @"
+UPDATE dbo.Tbl_Student
+SET StudentName=@StudentName,
+    FatherName=@FatherName,
+    Email=@Email,
+    DateOfBirth=@DateOfBirth,
+    MobileNo=@MobileNo
+WHERE StudentNo=@StudentNo;";
 
-        SqlConnection connection = new SqlConnection(sb.ConnectionString);
-        connection.Open();
+        var parameters = new List<SqlParameterDto>
+        {
+            new(){ Name="@StudentName", Value="Updated Name"},
+            new(){ Name="@FatherName", Value="Updated Father"},
+            new(){ Name="@Email", Value="updated@example.com"},
+            new(){ Name="@DateOfBirth", Value=new DateTime(2000,1,1)},
+            new(){ Name="@MobileNo", Value="09999999999"},
+            new(){ Name="@StudentNo", Value="STU001"}
+        };
 
-        string query = @"UPDATE [dbo].[Tbl_Student]
-SET
-    StudentName = @StudentName,
-    FatherName = @FatherName,
-    Email = @Email,
-    DateOfBirth = @DateOfBirth,
-    MobileNo = @MobileNo
-WHERE StudentNo = @StudentNo;";
-        SqlCommand cmd = new SqlCommand(query, connection);
-        cmd.Parameters.AddWithValue("@StudentName", "Updated Name");
-        cmd.Parameters.AddWithValue("@FatherName", "Updated Father");
-        cmd.Parameters.AddWithValue("@Email", "updated.email@example.com");
-        cmd.Parameters.AddWithValue("@DateOfBirth", new DateTime(2000, 1, 1));  
-        cmd.Parameters.AddWithValue("@MobileNo", "09999999999");
-        cmd.Parameters.AddWithValue("@StudentNo", "STU001");
-        int result = cmd.ExecuteNonQuery();
+        int result = _dbService.Execute(query, parameters);
 
-        connection.Close();
+        Console.WriteLine($"{result} row updated.");
     }
 
     public void Delete()
     {
-        SqlConnectionStringBuilder sb = new SqlConnectionStringBuilder();
-        sb.DataSource = "."; //(local) // server name
-        sb.InitialCatalog = "June2026Db"; // database name
-        sb.UserID = "sa";
-        sb.Password = "sasa@123";
-        sb.TrustServerCertificate = true;
+        string query = @"DELETE FROM dbo.Tbl_Student WHERE StudentNo=@StudentNo;";
 
-        SqlConnection connection = new SqlConnection(sb.ConnectionString);
-        connection.Open();
+        var parameters = new List<SqlParameterDto>
+        {
+            new(){ Name="@StudentNo", Value="STU005"}
+        };
 
-        string query = @"DELETE FROM [dbo].[Tbl_Student]
-WHERE StudentNo = 'STU005';";
-        SqlCommand cmd = new SqlCommand(query, connection);
-        int result = cmd.ExecuteNonQuery();
+        int result = _dbService.Execute(query, parameters);
 
-        connection.Close();
+        Console.WriteLine($"{result} row deleted.");
     }
 }
