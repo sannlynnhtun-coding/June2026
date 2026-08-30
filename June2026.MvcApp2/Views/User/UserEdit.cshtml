@@ -1,0 +1,14 @@
+﻿@model UserEditResponseModel
+<form action="/User/Update/@Model.UserId" method="post">
+    <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" name="Username" value="@Model.UserName" id="username" placeholder="Enter your username">
+    </div>
+
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" name="Password" id="password" placeholder="Enter your password">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>

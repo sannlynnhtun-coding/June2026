@@ -22,7 +22,9 @@ public class UserService
     {
         try
         {
-            var lst = await _db.TblUsers.ToListAsync(); // 3sec
+            var lst = await _db.TblUsers
+                .OrderByDescending(x => x.UserId)
+                .ToListAsync(); // 3sec
 
             List<UserModel> users = new List<UserModel>();
 
