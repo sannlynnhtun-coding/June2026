@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "User List";
+    int count = 0;
+}
+
+<h1>User List</h1>
+
+<a href="/User/Create" class="btn btn-primary">Add User</a>
+
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th>Action</th>
+            <th>No.</th>
+            <th>User ID</th>
+            <th>Username</th>
+        </tr>
+    </thead>
+    <tbody id="userTableBody">
+    </tbody>
+</table>
+@section scripts {
+    <script>
+        loadData();
+
+        function loadData() {
+            $.ajax({
+                type: "GET",
+                url: '/User/UserList',
+                success: function(data) {
+                    console.log({ data });
+
+                    for (var i = 0; i < data.Users.length; i++) {
+                        var item = data.Users[i];
+                        var row = '<tr>' +
+                            '<td>' +
+                            '<a href="/User/Edit/' + item.UserId + '" class="btn btn-sm btn-outline-warning">Edit</a> ' +
+                            '<button' + item.UserId + `" type="button" onclick="deleteUser('${item.UserId}')" class="btn btn-sm btn-outline-danger">Delete</button>` +
+                            '</td>' +
+                            '<td>' + (i + 1) + '</td>' +
+                            '<td>' + item.UserId + '</td>' +
+                            '<td>' + item.Username + '</td>' +
+                            '</tr>';
+                        $('#userTableBody').append(row);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("Error: " + xhr.responseText);
+                }
+            });
+        }
+
+        function deleteUser(id){
+            console.log({id});
+
+            const confirmResult = confirm("Are you sure want to delete?");
+
+            if(!confirmResult) return;
+
+            const _requestModel = {
+                UserId: id
+            }
+
+            $.ajax({
+                    type: "POST",
+                    url: '/User/UserDelete',
+                    data: { requestModel: _requestModel },
+                    success: function(response) {
+                        console.log({ response });
+                        alert(response.Message);
+                        if (!response.IsSuccess) {
+                            return;
+                        }
+                        window.location.href = '/User';
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Error: " + xhr.responseText);
+                    }
+                });
+        }
+    </script>
+}

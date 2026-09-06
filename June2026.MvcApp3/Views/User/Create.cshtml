@@ -1,0 +1,47 @@
+﻿<div class="mb-3">
+    <label for="username" class="form-label">Username</label>
+    <input type="text" class="form-control" name="Username" id="username" placeholder="Enter your username">
+</div>
+
+<div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input type="password" class="form-control" name="Password" id="password" placeholder="Enter your password">
+</div>
+
+<button type="button" class="btn btn-primary" id="bntSave">Save</button>
+
+@section scripts {
+    <script>
+        $(document).ready(function() {
+            $('#bntSave').click(function() {
+                var username = $('#username').val();
+                var password = $('#password').val();
+
+                const _requestModel = {
+                    Username: username,
+                    Password: password
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: '/User/Save',
+                    data: { requestModel: _requestModel },
+                    success: function(response) {
+                        console.log({ response });
+
+                        alert(response.Message);
+
+                        if (!response.IsSuccess) {
+                            return;
+                        }
+
+                        window.location.href = '/User/Index';
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Error: " + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}
