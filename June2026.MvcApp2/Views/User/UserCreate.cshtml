@@ -1,12 +1,79 @@
-﻿<form action="/User/Save" method="post">
+﻿@model UserCreateRequestModel
+@using June2026.MvcApp2.Controllers
+@{
+    List<UserRoleModel> roles = new List<UserRoleModel>();
+
+    // if (ViewBag.Roles != null)
+    // {
+    //     roles = ViewBag.Roles as List<UserRoleModel>;
+    // }
+    if (ViewData["Roles"] != null)
+    {
+        roles = ViewData["Roles"] as List<UserRoleModel>;
+    }
+
+    bool isSuccessTempData = false;
+    if (TempData["IsSuccess"] != null)
+    {
+        isSuccessTempData = Convert.ToBoolean(TempData["IsSuccess"]);
+    }
+    string message = string.Empty;
+    if (TempData["Message"] != null)
+    {
+        message = TempData["Message"].ToString();
+    }
+}
+
+@if (TempData["Message"] != null)
+{
+    if (isSuccessTempData)
+    {
+        <div class="alert alert-success" role="alert">
+            @message
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            @message
+        </div>
+    }
+}
+
+<form action="/User/Save" method="post">
     <div class="mb-3">
         <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" name="Username" id="username" placeholder="Enter your username">
+        <input type="text" class="form-control" name="Username" id="username" value="@Model.Username" placeholder="Enter your username">
     </div>
 
     <div class="mb-3">
         <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" name="Password" id="password" placeholder="Enter your password">
+        <input type="password" class="form-control" name="Password" id="password" value="@Model.Password" placeholder="Enter your password">
+    </div>
+
+    <div class="mb-3">
+        <label for="role" class="form-label">Role</label>
+        <select class="form-control" name="RoleCode" id="role">
+            @if (Model.RoleCode == "0")
+            {
+                <option value="0" selected>Select a role</option>
+            }
+            else
+            {
+                <option value="0">Select a role</option>
+            }
+            @foreach (var role in roles)
+            {
+                if (Model.RoleCode == role.RoleCode)
+                {
+                    <option value="@role.RoleCode" selected>@role.RoleName</option>
+                }
+                else
+                {
+                    <option value="@role.RoleCode">@role.RoleName</option>
+                }
+            }
+        </select>
     </div>
 
     <button type="submit" class="btn btn-primary">Login</button>

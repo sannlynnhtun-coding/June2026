@@ -1,0 +1,58 @@
+@model ProductEditResponseModel
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<h1>Edit Product</h1>
+
+<div class="mb-3">
+    <label class="form-label">Product Code</label>
+    <input type="text" class="form-control" id="productCode" value="@Model.ProductCode" placeholder="Leave blank to keep old value">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Product Name</label>
+    <input type="text" class="form-control" id="productName" value="@Model.ProductName" placeholder="Leave blank to keep old value">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Price</label>
+    <input type="number" class="form-control" id="price" step="0.01" min="0.01">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Quantity</label>
+    <input type="number" class="form-control" id="quantity" min="0">
+</div>
+
+<button type="button" class="btn btn-primary" id="bntSave">Update</button>
+<a href="/Product" class="btn btn-outline-secondary">Back</a>
+
+@section scripts {
+    <script>
+        $('#bntSave').on('click', function() {
+            const _requestModel = {
+                ProductCode: $('#productCode').val(),
+                ProductName: $('#productName').val(),
+                Price: $('#price').val() ? parseFloat($('#price').val()) : null,
+                Quantity: $('#quantity').val() ? parseInt($('#quantity').val()) : null
+            };
+
+            $.ajax({
+                type: "POST",
+                url: '/Product/Update/@Model.ProductId',
+                data: { requestModel: _requestModel },
+                success: function(response) {
+                    alert(response.Message);
+                    if (!response.IsSuccess) {
+                        return;
+                    }
+                    window.location.href = '/Product';
+                },
+                error: function(xhr) {
+                    alert("Error: " + xhr.responseText);
+                }
+            });
+        });
+    </script>
+}

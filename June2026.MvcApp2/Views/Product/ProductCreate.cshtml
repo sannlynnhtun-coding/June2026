@@ -1,0 +1,44 @@
+@model ProductCreateRequestModel
+@{
+    bool hasMessage = TempData["Message"] != null;
+    bool isSuccess = false;
+    string message = string.Empty;
+    if (TempData["IsSuccess"] != null)
+    {
+        isSuccess = Convert.ToBoolean(TempData["IsSuccess"]);
+        if (TempData["Message"] != null)
+        {
+            message = TempData["Message"]!.ToString()!;
+        }
+    }
+}
+
+<h1>Create Product</h1>
+
+@if (hasMessage)
+{
+    <div class="alert @(isSuccess ? "alert-success" : "alert-danger")" role="alert">
+        @message
+    </div>
+}
+
+<form action="/Product/Save" method="post" class="mt-3">
+    <div class="mb-3">
+        <label for="productCode" class="form-label">Product Code</label>
+        <input type="text" class="form-control" id="productCode" name="ProductCode" value="@Model.ProductCode" placeholder="P001">
+    </div>
+    <div class="mb-3">
+        <label for="productName" class="form-label">Product Name</label>
+        <input type="text" class="form-control" id="productName" name="ProductName" value="@Model.ProductName" placeholder="Coffee">
+    </div>
+    <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input type="number" class="form-control" id="price" name="Price" value="@Model.Price" step="0.01" min="0.01">
+    </div>
+    <div class="mb-3">
+        <label for="quantity" class="form-label">Quantity</label>
+        <input type="number" class="form-control" id="quantity" name="Quantity" value="@Model.Quantity" min="0">
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="/Product" class="btn btn-outline-secondary">Back</a>
+</form>

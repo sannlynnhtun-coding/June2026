@@ -1,0 +1,98 @@
+@model SaleListResponseModel
+@{
+    ViewData["Title"] = "Sales";
+
+    List<SaleModel> salesCards = ViewData["SalesCards"] as List<SaleModel> ?? new List<SaleModel>();
+
+    bool hasMessage = TempData["Message"] != null;
+    bool isSuccess = false;
+    string message = string.Empty;
+    if (TempData["IsSuccess"] != null)
+    {
+        isSuccess = Convert.ToBoolean(TempData["IsSuccess"]);
+        if (TempData["Message"] != null)
+        {
+            message = TempData["Message"]!.ToString()!;
+        }
+    }
+}
+
+<h1>Sales</h1>
+
+<a href="/Sale/Create" class="btn btn-primary mb-3">Create Sale</a>
+
+@if (hasMessage)
+{
+    <div class="alert @(isSuccess ? "alert-success" : "alert-danger")" role="alert">
+        @message
+    </div>
+}
+
+<div class="row row-cols-1 row-cols-md-3 g-3 mb-4">
+    @if (salesCards.Count == 0)
+    {
+        <div class="col">
+            <div class="text-muted">No sale summary available yet.</div>
+        </div>
+    }
+    else
+    {
+        foreach (var sale in salesCards)
+        {
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@sale.VoucherNo</h5>
+                        <p class="card-text">Date: @sale.SaleDateTime</p>
+                        <p class="card-text">Amount: @sale.TotalAmount</p>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Voucher No.</th>
+            <th>Sale Date</th>
+            <th>Total Amount</th>
+            <th>Items</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model?.Sales == null || Model.Sales.Count == 0)
+        {
+            <tr>
+                <td colspan="4">No sales found.</td>
+            </tr>
+        }
+        else
+        {
+            foreach (SaleModel item in Model.Sales)
+            {
+                <tr>
+                    <td>@item.VoucherNo</td>
+                    <td>@item.SaleDateTime</td>
+                    <td>@item.TotalAmount</td>
+                    <td>
+                        @if (item.SaleDetails.Count == 0)
+                        {
+                            <span>No items</span>
+                        }
+                        else
+                        {
+                            <ul class="mb-0">
+                                @foreach (var detail in item.SaleDetails)
+                                {
+                                    <li>@detail.ProductName x @detail.Quantity (@detail.Price)</li>
+                                }
+                            </ul>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

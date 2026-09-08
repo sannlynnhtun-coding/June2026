@@ -3,11 +3,48 @@
 @{
     ViewData["Title"] = "User List";
     int count = 0;
+
+    bool isSuccessViewData = false;
+    if (ViewData["IsSuccess"] != null)
+    {
+        isSuccessViewData = Convert.ToBoolean(ViewData["IsSuccess"]);
+    }
+    bool isSuccessViewBag = false;
+    if (ViewBag.IsSuccess != null)
+    {
+        isSuccessViewBag = ViewBag.IsSuccess;
+    }
+    bool isSuccessTempData = false;
+    if (TempData["IsSuccess"] != null)
+    {
+        isSuccessTempData = Convert.ToBoolean(TempData["IsSuccess"]);
+    }
+    string message = string.Empty;
+    if (TempData["Message"] != null)
+    {
+        message = TempData["Message"].ToString();
+    }
 }
 
 <h1>User List</h1>
 
 <a href="/User/Create" class="btn btn-primary">Add User</a>
+
+@if (TempData["Message"] != null)
+{
+    if (isSuccessTempData)
+    {
+        <div class="alert alert-success" role="alert">
+            @message
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            @message
+        </div>
+    }
+}
 
 <table class="table table-responsive">
     <thead>

@@ -1,0 +1,44 @@
+@model ProductEditResponseModel
+@{
+    bool hasMessage = TempData["Message"] != null;
+    bool isSuccess = false;
+    string message = string.Empty;
+    if (TempData["IsSuccess"] != null)
+    {
+        isSuccess = Convert.ToBoolean(TempData["IsSuccess"]);
+        if (TempData["Message"] != null)
+        {
+            message = TempData["Message"]!.ToString()!;
+        }
+    }
+}
+
+<h1>Edit Product</h1>
+
+@if (hasMessage)
+{
+    <div class="alert @(isSuccess ? "alert-success" : "alert-danger")" role="alert">
+        @message
+    </div>
+}
+
+<form action="/Product/Update/@Model.ProductId" method="post" class="mt-3">
+    <div class="mb-3">
+        <label class="form-label">Product Code</label>
+        <input type="text" class="form-control" name="ProductCode" value="@Model.ProductCode" placeholder="Leave blank to keep old value">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Product Name</label>
+        <input type="text" class="form-control" name="ProductName" value="@Model.ProductName" placeholder="Leave blank to keep old value">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Price</label>
+        <input type="number" class="form-control" name="Price" value="" step="0.01" min="0.01" placeholder="Leave blank to keep old value">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Quantity</label>
+        <input type="number" class="form-control" name="Quantity" value="" min="0" placeholder="Leave blank to keep old value">
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a href="/Product" class="btn btn-outline-secondary">Back</a>
+</form>

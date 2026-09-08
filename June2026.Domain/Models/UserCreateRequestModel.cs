@@ -4,6 +4,7 @@ public class UserCreateRequestModel
 {
     public string Username { get; set; }
     public string Password { get; set; }
+    public string RoleCode { get; set; }
 }
 
 public class UserCreateResponseModel

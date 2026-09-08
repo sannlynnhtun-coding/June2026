@@ -1,0 +1,58 @@
+@model ProductCreateRequestModel
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<h1>Create Product</h1>
+
+<div class="mb-3">
+    <label for="productCode" class="form-label">Product Code</label>
+    <input type="text" class="form-control" id="productCode" placeholder="P001">
+</div>
+
+<div class="mb-3">
+    <label for="productName" class="form-label">Product Name</label>
+    <input type="text" class="form-control" id="productName" placeholder="Coffee">
+</div>
+
+<div class="mb-3">
+    <label for="price" class="form-label">Price</label>
+    <input type="number" class="form-control" id="price" step="0.01" min="0.01">
+</div>
+
+<div class="mb-3">
+    <label for="quantity" class="form-label">Quantity</label>
+    <input type="number" class="form-control" id="quantity" min="0">
+</div>
+
+<button type="button" class="btn btn-primary" id="bntSave">Save</button>
+<a href="/Product" class="btn btn-outline-secondary">Back</a>
+
+@section scripts {
+    <script>
+        $('#bntSave').on('click', function() {
+            const _requestModel = {
+                ProductCode: $('#productCode').val(),
+                ProductName: $('#productName').val(),
+                Price: parseFloat($('#price').val()),
+                Quantity: parseInt($('#quantity').val())
+            };
+
+            $.ajax({
+                type: "POST",
+                url: '/Product/Save',
+                data: { requestModel: _requestModel },
+                success: function(response) {
+                    alert(response.Message);
+                    if (!response.IsSuccess) {
+                        return;
+                    }
+                    window.location.href = '/Product';
+                },
+                error: function(xhr) {
+                    alert("Error: " + xhr.responseText);
+                }
+            });
+        });
+    </script>
+}

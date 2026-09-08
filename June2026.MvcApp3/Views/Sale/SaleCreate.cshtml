@@ -1,0 +1,121 @@
+@model SaleCreateRequestModel
+@{
+    ViewData["Title"] = "Create Sale";
+    List<ProductModel> products = ViewData["Products"] as List<ProductModel> ?? new List<ProductModel>();
+
+    string defaultDateTime = Model.SaleDateTime == default
+        ? DateTime.Now.ToString("yyyy-MM-ddTHH:mm")
+        : Model.SaleDateTime.ToString("yyyy-MM-ddTHH:mm");
+}
+
+<h1>Create Sale</h1>
+
+<form id="saleForm">
+    <div class="mb-3">
+        <label class="form-label">Voucher No.</label>
+        <input type="text" class="form-control" id="voucherNo" value="@Model.VoucherNo" placeholder="V-0001">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Sale Date Time</label>
+        <input type="datetime-local" class="form-control" id="saleDateTime" value="@defaultDateTime">
+    </div>
+
+    <h4>Sale Details</h4>
+    <div id="saleDetailLines">
+        <div class="row g-2 detail-line mb-2" data-index="0">
+            <div class="col-md-5">
+                <label class="form-label">Product</label>
+                <select class="form-select" name="SaleDetails[0].ProductId">
+                    <option value="0">-- select product --</option>
+                    @foreach (var product in products)
+                    {
+                        <option value="@product.ProductId">@product.ProductName (@product.ProductCode)</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Quantity</label>
+                <input type="number" class="form-control" name="SaleDetails[0].Quantity" min="1" value="1">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="button" class="btn btn-outline-danger remove-line w-100" disabled>Remove</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button type="button" id="addLine" class="btn btn-outline-secondary">Add Product Line</button>
+        <button type="button" id="bntSave" class="btn btn-primary">Save Sale</button>
+        <a href="/Sale" class="btn btn-outline-secondary">Back</a>
+    </div>
+</form>
+
+@section scripts {
+    <script>
+        function refreshIndexes() {
+            const lines = $('#saleDetailLines .detail-line');
+            lines.each(function(index, line) {
+                $(line).find('[name]').each(function() {
+                    const currentName = $(this).attr('name');
+                    const nextName = currentName.replace(/\[\d+\]/, `[${index}]`);
+                    $(this).attr('name', nextName);
+                });
+            });
+        }
+
+        $(document).on('click', '#addLine', function() {
+            const clonedLine = $('#saleDetailLines .detail-line:first').clone();
+            clonedLine.find('select').val('0');
+            clonedLine.find('input').val('1');
+            clonedLine.find('.remove-line').prop('disabled', false);
+            $('#saleDetailLines').append(clonedLine);
+            refreshIndexes();
+        });
+
+        $(document).on('click', '.remove-line', function() {
+            const lines = $('.detail-line');
+            if (lines.length > 1) {
+                $(this).closest('.detail-line').remove();
+                refreshIndexes();
+            }
+        });
+
+        $('#bntSave').on('click', function() {
+            refreshIndexes();
+
+            const requestModel = {
+                VoucherNo: $('#voucherNo').val(),
+                SaleDateTime: $('#saleDateTime').val(),
+                SaleDetails: []
+            };
+
+            $('#saleDetailLines .detail-line').each(function() {
+                const productId = parseInt($(this).find('[name$=".ProductId"]').val());
+                const quantity = parseInt($(this).find('[name$=".Quantity"]').val());
+
+                if (productId > 0 && quantity > 0) {
+                    requestModel.SaleDetails.push({
+                        ProductId: productId,
+                        Quantity: quantity
+                    });
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '/Sale/Save',
+                data: { requestModel: requestModel },
+                success: function(response) {
+                    alert(response.Message);
+                    if (!response.IsSuccess) {
+                        return;
+                    }
+                    window.location.href = '/Sale';
+                },
+                error: function(xhr) {
+                    alert("Error: " + xhr.responseText);
+                }
+            });
+        });
+    </script>
+}
