@@ -2,6 +2,7 @@
   <Folder Name="/Solution Items/">
     <File Path="README.md" />
   </Folder>
+  <Project Path="June2026.ChartApp/June2026.ChartApp.csproj" Id="95ed39a0-c1f3-4918-b48e-56b920fe74b2" />
   <Project Path="June2026.ConsoleApp/June2026.ConsoleApp.csproj" />
   <Project Path="June2026.ConsoleApp2/June2026.ConsoleApp2.csproj" Id="a7b4ee3b-120c-45ad-8915-b42e7c3b125e" />
   <Project Path="June2026.ConsoleApp3/June2026.ConsoleApp3.csproj" Id="efd7edd1-76ea-4215-aced-b13620402a68" />

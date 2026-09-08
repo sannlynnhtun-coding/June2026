@@ -1,0 +1,56 @@
+﻿@using Newtonsoft.Json;
+@{
+    ViewData["Title"] = "Home Page";
+
+    List<int> series = ViewData["Series"] as List<int> ?? new List<int> { };
+    List<string> labels = ViewData["Labels"] as List<string> ?? new List<string> { };
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div id="chart"></div>
+
+@section scripts {
+    <script>
+        var options = {
+            series: @Html.Raw(JsonConvert.SerializeObject(series)), // data
+            chart: {
+                width: 1000,
+                type: 'pie',
+            },
+            labels: @Html.Raw(JsonConvert.SerializeObject(labels)), // label
+            title: {
+                text: 'Website Traffic by Source',
+                align: 'center',
+            },
+            legend: {
+                show: false,
+            },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        external: {
+                            show: true,
+                        },
+                    },
+                },
+            },
+            responsive: [
+                {
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 500,
+                        },
+                    },
+                },
+            ],
+        }
+
+        var chart = new ApexCharts(document.querySelector('#chart'), options)
+        chart.render()
+    </script>
+}
