@@ -16,6 +16,7 @@
   <Project Path="June2026.MvcApp2/June2026.MvcApp2.csproj" Id="60a7aff7-7e3b-461e-827a-904cc7ae54ed" />
   <Project Path="June2026.MvcApp3/June2026.MvcApp3.csproj" Id="4b2e1549-62bd-407f-b1c6-13e1c435f6e3" />
   <Project Path="June2026.RealtimeChatApp/June2026.RealtimeChatApp.csproj" Id="630ca259-dc21-4fdb-a4ee-7e72bff7b5a3" />
+  <Project Path="June2026.RealtimeNotiApp/June2026.RealtimeNotiApp.csproj" Id="333f00f0-f613-47d5-a43c-e6f27cbc0f74" />
   <Project Path="June2026.WebApi/June2026.WebApi.csproj" Id="b2977168-d46a-4323-bb5b-5eda682dedae" />
   <Project Path="June2026.WinFormsApp/June2026.WinFormsApp.csproj" Id="14c55b03-7afb-4453-9a6b-3ead8617700d" />
   <Project Path="June2026.WinFormsApp2/June2026.WinFormsApp2.csproj" Id="50966191-ebc8-4e9d-bca2-29567018ba8d" />
