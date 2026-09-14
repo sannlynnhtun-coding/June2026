@@ -1,16 +1,20 @@
 using June2026.Domain.Features.Product;
 using June2026.Domain.Models;
+using June2026.MvcApp3.Hubs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace June2026.MvcApp3.Controllers;
 
 public class ProductController : Controller
 {
+    private readonly IHubContext<RealtimeHub> _hubContext;
     private readonly IProductService _productService;
 
-    public ProductController(IProductService productService)
+    public ProductController(IProductService productService, IHubContext<RealtimeHub> hubContext)
     {
         _productService = productService;
+        _hubContext = hubContext;
     }
 
     [ActionName("Index")]
@@ -76,6 +80,18 @@ public class ProductController : Controller
         ProductCreateResponseModel response = await _productService.CreateProductAsync(requestModel);
         TempData["IsSuccess"] = response.IsSuccess;
         TempData["Message"] = response.Message;
+
+        if (response.IsSuccess)
+        {
+            var lst = await _productService.GetProductsAsync();
+
+            var labels = lst.Products.Select(p => p.ProductName).ToList();
+            var data = lst.Products.Select(p => p.Quantity).ToList();
+
+            // Notify all connected clients about the new product
+            await _hubContext.Clients.All.SendAsync("ReceiveProductUpdateEvent", labels, data);
+        }
+
         return Json(response);
     }
 

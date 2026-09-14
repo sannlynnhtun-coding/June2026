@@ -1,0 +1,91 @@
+﻿<div id="chart-container">
+    <div id="chart"></div>
+</div>
+
+
+@section scripts {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+    <script>
+        var connection = new signalR.HubConnectionBuilder().withUrl("/realtimeHub").build();
+
+           
+        connection.on("ReceiveProductUpdateEvent", function (labels, data) {
+           console.log("Received product update event:", labels, data);
+
+           loadChart(labels, data);
+        });
+
+        connection.start().then(function () {
+
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        function loadChart(_labels, _data){
+            $('#chart-container').html(`<div id="chart"></div>`);
+
+            var options = {
+                  series: [
+                    {
+                      name: 'Units sold',
+                      data: _data,
+                    },
+                  ],
+                  annotations: {
+                    points: [
+                      {
+                        x: 'Pomegranates',
+                        seriesIndex: 0,
+                        label: {
+                          borderColor: '#775DD0',
+                          offsetY: 0,
+                          style: {
+                            color: '#fff',
+                            background: '#775DD0',
+                          },
+                          text: 'Best seller',
+                        },
+                      },
+                    ],
+                  },
+                  chart: {
+                    height: 350,
+                    type: 'bar',
+                  },
+                  title: {
+                    text: 'Fruit Sales by Type',
+                    align: 'left',
+                  },
+                  plotOptions: {
+                    bar: {
+                      borderRadius: 10,
+                      columnWidth: '50%',
+                    },
+                  },
+                  dataLabels: {
+                    enabled: false,
+                  },
+                  stroke: {
+                    width: 0,
+                  },
+                  xaxis: {
+                    labels: {
+                      rotate: -45,
+                    },
+                    categories: _labels,
+                    tickPlacement: 'on',
+                  },
+                  yaxis: {
+                    title: {
+                      text: 'Units sold (k)',
+                    },
+                  },
+                }
+
+                var chart = new ApexCharts(document.querySelector('#chart'), options)
+                chart.render()
+        }
+    </script>
+
+}

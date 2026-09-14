@@ -2,6 +2,7 @@ using June2026.Database.AppDbContextModels;
 using June2026.Domain.Features.Product;
 using June2026.Domain.Features.Sale;
 using June2026.Domain.Features.User;
+using June2026.MvcApp3.Hubs;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<SaleService>();
 builder.Services.AddScoped<UserService>();
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -41,5 +44,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapHub<RealtimeHub>("/realtimeHub");
 
 app.Run();
