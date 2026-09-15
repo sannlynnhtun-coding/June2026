@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using June2026.Domain.Features.Product
+@inject IProductService _productService
+
+@{
+    int count = await _productService.GetProductsAsync().ContinueWith(t => t.Result.Products.Count);
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -38,6 +45,12 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <span>@count</span>
+            @* @await Html.RenderPartialAsync("Product/ProductNoti") *@
+
+            @* <partial name="/Views/Product/ProductNoti" /> *@
+
+            <div id="noti-container"></div>
             @RenderBody()
         </main>
     </div>
@@ -54,5 +67,9 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     @await RenderSectionAsync("scripts", required: false)
+
+    <script>
+            $('#noti-container').load('/Product/ProductNoti');
+    </script>
 </body>
 </html>

@@ -17,6 +17,12 @@ public class ProductController : Controller
         _hubContext = hubContext;
     }
 
+    public async Task<IActionResult> ProductNoti()
+    {
+        var model = await _productService.GetProductsAsync();
+        return PartialView("ProductNoti", model.Products.Count);
+    }
+
     [ActionName("Index")]
     public async Task<IActionResult> ProductList()
     {
