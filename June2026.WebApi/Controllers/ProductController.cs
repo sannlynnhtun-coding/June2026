@@ -8,19 +8,27 @@ namespace June2026.WebApi.Controllers;
 [ApiController]
 public class ProductController : ControllerBase
 {
+    private readonly ILogger<ProductController> _logger;
     private readonly IProductService _productService;
 
-    public ProductController(IProductService productService)
+    public ProductController(ILogger<ProductController> logger, IProductService productService)
     {
+        _logger = logger;
         _productService = productService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetProductsAsync()
     {
+        _logger.LogInformation("GetProductsAsync => Fetching all products.");
         var result = await _productService.GetProductsAsync();
         if (result.IsSuccess)
+        {
+            _logger.LogInformation("GetProductsAsync => Products fetched successfully.");
             return Ok(result);
+        }
+
+        _logger.LogWarning("GetProductsAsync => Failed to fetch products: {Message}", result.Message);
         return BadRequest(result);
     }
 
