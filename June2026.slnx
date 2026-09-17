@@ -12,6 +12,7 @@
   <Project Path="June2026.ConsoleApp7/June2026.ConsoleApp7.csproj" />
   <Project Path="June2026.Database/June2026.Database.csproj" Id="231a86c3-a7a0-4644-aba8-efcbdc54c3c5" />
   <Project Path="June2026.Domain/June2026.Domain.csproj" Id="7f9ad138-2dff-46db-9941-19353f67f135" />
+  <Project Path="June2026.MiddlewareWebApp/June2026.MiddlewareWebApp.csproj" Id="d9c06937-5ec4-4fd1-a428-3067df67cd2a" />
   <Project Path="June2026.MvcApp/June2026.MvcApp.csproj" Id="fe7243bf-57ba-415e-a944-186048fb0da6" />
   <Project Path="June2026.MvcApp2/June2026.MvcApp2.csproj" Id="60a7aff7-7e3b-461e-827a-904cc7ae54ed" />
   <Project Path="June2026.MvcApp3/June2026.MvcApp3.csproj" Id="4b2e1549-62bd-407f-b1c6-13e1c435f6e3" />
