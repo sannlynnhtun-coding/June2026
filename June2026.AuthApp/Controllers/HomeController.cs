@@ -9,14 +9,19 @@ namespace June2026.AuthApp.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IHttpClientFactory _httpClientFactory;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
     {
         _logger = logger;
+        _httpClientFactory = httpClientFactory;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> IndexAsync()
     {
+        var client = _httpClientFactory.CreateClient();
+        client.BaseAddress = new Uri("http://localhost:3000/");
+        await client.GetAsync("api/user");
         return View();
     }
 
