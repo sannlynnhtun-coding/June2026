@@ -17,3 +17,10 @@ A web-based Point of Sale (POS) system for a bookstore that enables customers to
 - **GitHub username:** [hlaingmyoaungdeveloper](https://github.com/hlaingmyoaungdeveloper)
 
 A layered .NET 8 Web API for managing online classes, student enrollments, capacity, schedules, subjects, users, and teaching plans using ASP.NET Core and Entity Framework Core.
+
+### [SAMAT — Cyber Cafe & Gaming Lounge Management Platform](https://github.com/cctn214/Samat)
+
+- **Student:** Soe Bala Win
+- **GitHub username:** [cctn214](https://github.com/cctn214)
+
+An all-in-one management platform for cyber cafés, esports arenas, and gaming lounges, featuring terminal and session tracking, prepaid and postpaid billing, memberships, a café POS, and order fulfillment.
