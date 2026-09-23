@@ -31,3 +31,10 @@ An all-in-one management platform for cyber cafés, esports arenas, and gaming l
 - **GitHub username:** [htet-dev](https://github.com/htet-dev)
 
 A web-based childcare management system that helps educators manage children and track daily care activities such as meals, nappy changes, and nap times using ASP.NET Core MVC, Web API, C#, and SQL Server.
+
+### [Hotel Booking Management System](https://github.com/khinshwedeveloper/Project-Ks7)
+
+- **Student:** Khin Shwe
+- **GitHub username:** [khinshwedeveloper](https://github.com/khinshwedeveloper)
+
+A web-based ASP.NET Core MVC system that helps hotel staff manage customers, rooms, room types, bookings, payments, services, check-ins, check-outs, reports, dashboard notifications, and real-time updates.
