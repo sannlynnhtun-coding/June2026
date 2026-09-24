@@ -38,3 +38,10 @@ A web-based childcare management system that helps educators manage children and
 - **GitHub username:** [khinshwedeveloper](https://github.com/khinshwedeveloper)
 
 A web-based ASP.NET Core MVC system that helps hotel staff manage customers, rooms, room types, bookings, payments, services, check-ins, check-outs, reports, dashboard notifications, and real-time updates.
+
+### [YourRecipes](https://github.com/devsanlphyo/yourrecipes)
+
+- **Student:** San Linn Phyo
+- **GitHub username:** [devsanlphyo](https://github.com/devsanlphyo)
+
+A recipe-sharing website where users can browse recipes, save favorites, and publish their own recipes, built with a Next.js frontend and an ASP.NET Core Web API backend.
