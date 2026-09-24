@@ -45,3 +45,10 @@ A web-based ASP.NET Core MVC system that helps hotel staff manage customers, roo
 - **GitHub username:** [devsanlphyo](https://github.com/devsanlphyo)
 
 A recipe-sharing website where users can browse recipes, save favorites, and publish their own recipes, built with a Next.js frontend and an ASP.NET Core Web API backend.
+
+### [Shared Expense Tracker App](https://github.com/Tsukuna/SharedExpenseTrackerApp)
+
+- **Student:** Htet Min Lu
+- **GitHub username:** [Tsukuna](https://github.com/Tsukuna)
+
+An application for recording and managing shared expenses, helping users keep track of costs shared with other people.
